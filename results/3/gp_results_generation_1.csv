@@ -1,0 +1,13 @@
+Individual,Fitness,Precision,Recall,Tree
+0,0.023942723105925108,0.013018820138103298,0.19642541394762877,"Funciones.Img_Multi (Funciones.Filter_Gaussian (Funciones.Img_Div (I , R ) ) , B )"
+1,0.0,0.0,0.0,"Funciones.Filter_Gaussian (Funciones.DY (Funciones.Img_Sub (R , R ) ) )"
+2,0.13002273353826918,0.07722849783023919,0.8181654277842856,"Funciones.Img_Sub (I , B )"
+3,0.03023334003452175,0.028941069137745853,0.5399500296998953,"Funciones.Img_Sum (Funciones.Img_Div (Funciones.Img_Multi (R , G ) , G ) , Funciones.Img_Div (R , Funciones.DX (Funciones.Img_Div (B , G ) ) ) )"
+4,0.05105118356513176,0.028305662411714144,0.33613482433843217,"Funciones.Img_Multi (I , G )"
+5,0.0,0.0,0.0,"Funciones.Img_Sub (Funciones.DX (R ) , Funciones.DX (R ) )"
+6,0.05821649226785358,0.03151182127053644,0.544515116448597,"Funciones.Img_Sum (R , Funciones.Img_Sum (Funciones.Img_Sub (B , I ) , Funciones.Img_Sub (R , Funciones.DY (Funciones.Img_Multi (B , Funciones.Img_Div (Funciones.Img_Div (R , Funciones.Img_Div (I , B ) ) , R ) ) ) ) ) )"
+7,0.05944223730375573,0.032265958149295795,0.5266764688913219,"Funciones.Img_Sub (G , Funciones.DX (Funciones.Filter_Gaussian (G ) ) )"
+8,0.0,0.0,0.0,"Funciones.Img_Sub (B , B )"
+9,0.041087882382693494,0.04931824830174333,0.4418689060715791,"Funciones.Img_Sum (Funciones.Img_Sum (Funciones.Img_Multi (Funciones.DY (Funciones.DX (Funciones.Img_Div (G , Funciones.Img_Multi (Funciones.DX (G ) , R ) ) ) ) , I ) , Funciones.DY (Funciones.Filter_Gaussian (G ) ) ) , Funciones.Img_Multi (Funciones.Img_Sub (Funciones.Img_Sum (Funciones.Img_Sum (Funciones.Img_Multi (R , I ) , I ) , R ) , Funciones.DY (Funciones.Img_Multi (R , Funciones.Img_Sum (R , R ) ) ) ) , Funciones.Img_Div (Funciones.Img_Sub (Funciones.DY (R ) , Funciones.DX (Funciones.Filter_Gaussian (Funciones.DY (R ) ) ) ) , Funciones.Img_Div (I , Funciones.Img_Multi (Funciones.DX (B ) , Funciones.Img_Sum (Funciones.Img_Multi (I , Funciones.Img_Div (R , G ) ) , Funciones.Img_Sub (R , R ) ) ) ) ) ) )"
+Average,0.039399659219815066,,,
+Max,0.13002273353826918,,,2

@@ -1,0 +1,13 @@
+Individual,Fitness,Precision,Recall,Tree
+0,0.055752867590547026,0.030037471563386337,0.4936280299890865,"Funciones.Img_Multi (Funciones.Filter_Gaussian (Funciones.Img_Div (I , R ) ) , G )"
+1,0.0,0.0,0.0,"Funciones.Filter_Gaussian (Funciones.DY (Funciones.Img_Sub (R , R ) ) )"
+2,0.11644370267563232,0.06645412295908198,0.8389196277014271,"Funciones.Img_Sub (I , B )"
+3,0.02672198474044166,0.02762120936364163,0.4599858481467436,"Funciones.Img_Sum (Funciones.Img_Div (Funciones.Img_Multi (R , G ) , G ) , Funciones.Img_Div (R , Funciones.DX (Funciones.Img_Div (B , G ) ) ) )"
+4,0.06103835181840682,0.033926135070042794,0.39921539076698026,"Funciones.Img_Multi (I , G )"
+5,0.0573265971524969,0.031295063786305664,0.4475818994301243,"Funciones.Img_Sub (Funciones.DX (R ) , R )"
+6,0.0524572464179919,0.028063009463484195,0.5366674985895746,"Funciones.Img_Sum (R , Funciones.Img_Sum (Funciones.Img_Sub (B , I ) , Funciones.Img_Sub (R , Funciones.DY (Funciones.Img_Multi (B , Funciones.Img_Div (Funciones.Img_Div (R , Funciones.Img_Div (I , B ) ) , R ) ) ) ) ) )"
+7,0.054130303008261896,0.028966746500717965,0.5603874807200835,"Funciones.Img_Sub (G , Funciones.DX (Funciones.Filter_Gaussian (G ) ) )"
+8,0.0,0.0,0.0,"Funciones.Img_Sub (B , B )"
+9,0.056311208803173536,0.031300409393008835,0.4425974639069522,"Funciones.Img_Sum (Funciones.Img_Sum (Funciones.Img_Multi (Funciones.DY (Funciones.DX (Funciones.Img_Div (G , Funciones.Img_Multi (Funciones.DX (G ) , R ) ) ) ) , I ) , Funciones.DY (Funciones.Filter_Gaussian (G ) ) ) , Funciones.Img_Multi (Funciones.Img_Sub (Funciones.Img_Sum (Funciones.Img_Sum (Funciones.Img_Multi (R , I ) , I ) , R ) , Funciones.DY (Funciones.Img_Multi (R , Funciones.Img_Sum (R , R ) ) ) ) , G ) )"
+Average,0.048018226220695195,,,
+Max,0.11644370267563232,,,2

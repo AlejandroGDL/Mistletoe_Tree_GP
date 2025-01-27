@@ -35,8 +35,6 @@ import matplotlib.pyplot as plt
 sys.setrecursionlimit(1000000000)
 
 
-Number_Folder = 1
-
 class Variables:
     def __init__(self, VarList=[]):
         self.VarDict = {}
@@ -220,13 +218,9 @@ class Program:
         self.Tree = self.RandomTree(Func_set, Term_set, 1)
         self.Tree.ReInit()
 
-    def EvalTree(self):
+    def EvalTree(self, Number_Folder):
         print("\n ===== Next Individual =====")
         self.PrintTree()
-
-        Nodos = self.Count_TreeNodes()
-        print(f"Número de Nodos: {Nodos}")
-
 
         tree_str = self.TreetoStr(self.Tree)
         print(tree_str)
@@ -390,69 +384,73 @@ class Programs:
 
     @property
     def MainLoop(self):
-        fitness_history = []
-        best_individual_number = -1
+        # ES: 
+        # EN: 
+        for Number_Folder in range(1, 5):
+            fitness_history = []
+            best_individual_number = -1
 
-        for i in range(0, 1 + self.MaxGen):
-            print("Generation no:", i)
-            generation_fitness = []
-            self.MaxFitness = 0  
-            Avg_Generation_Fitness = 0
+            for i in range(0, 1 + self.MaxGen):
+                print("Generation no:", i)
+                generation_fitness = []
+                self.MaxFitness = 0  
+                Avg_Generation_Fitness = 0
 
-            # ES: Crea un archivo CSV de cada generación y guarda cada individuo
-            # EN: Create a CSV archive of each generation and save each individual
-            with open(f'results/{Number_Folder}/gp_results_generation_{i}.csv', mode='w', newline='') as file:
-                writer = csv.writer(file)
-                writer.writerow(['Individual', 'Fitness', 'Precision', 'Recall', 'Tree'])
+                # ES: Crea un archivo CSV de cada generación y guarda cada individuo
+                # EN: Create a CSV archive of each generation and save each individual
+                with open(f'results/{Number_Folder}/gp_results_generation_{i}.csv', mode='w', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(['Individual', 'Fitness', 'Precision', 'Recall', 'Tree'])
 
-            # ES: Crea una población
-            # EN: Create a poblation
-                for j in range(0, self.Population):
-                    Avg_Fitness, Avg_Precision, Avg_Recall = FitnessFunction(self.Individuo[j])
-                    self.Individuo[j].AssignFitness(Avg_Fitness, Avg_Precision, Avg_Recall)
-                    generation_fitness.append(Avg_Fitness)
-                    tree_str = self.Individuo[j].TreetoStr(self.Individuo[j].Tree)
-                    writer.writerow([j, Avg_Fitness, Avg_Precision, Avg_Recall, tree_str])
+                # ES: Crea una población
+                # EN: Create a poblation
+                    for j in range(0, self.Population):
+                        Avg_Fitness, Avg_Precision, Avg_Recall = FitnessFunction(self.Individuo[j], Number_Folder)
+                        self.Individuo[j].AssignFitness(Avg_Fitness, Avg_Precision, Avg_Recall)
+                        generation_fitness.append(Avg_Fitness)
+                        tree_str = self.Individuo[j].TreetoStr(self.Individuo[j].Tree)
+                        writer.writerow([j, Avg_Fitness, Avg_Precision, Avg_Recall, tree_str])
 
-                    if Avg_Fitness > self.MaxFitness:
-                        self.MaxFitness = Avg_Fitness
-                        self.MaxFitnessProg = self.Individuo[j]
-                        best_individual_number = j
-                    
-                self.Reproduction()
-                self.Elitism()
+                        if Avg_Fitness > self.MaxFitness:
+                            self.MaxFitness = Avg_Fitness
+                            self.MaxFitnessProg = self.Individuo[j]
+                            best_individual_number = j
+                        
+                    self.Reproduction()
+                    self.Elitism()
 
-            # ES: Promedio de fitness por generación
-            # EN: Average fitness per generation
-            Avg_Generation_Fitness = sum(generation_fitness) / len(generation_fitness)
+                # ES: Promedio de fitness por generación
+                # EN: Average fitness per generation
+                Avg_Generation_Fitness = sum(generation_fitness) / len(generation_fitness)
 
-            # ES: Guardar el promedio y maximo fitness 
-            # EN: Save average and max fitness
-            with open(f'results/{Number_Folder}/gp_results_generation_{i}.csv', mode='a', newline='') as file:
-                writer = csv.writer(file)
-                writer.writerow(['Average', Avg_Generation_Fitness, '', '', ''])
-                writer.writerow(['Max', self.MaxFitness, '', '', best_individual_number])
+                # ES: Guardar el promedio y maximo fitness 
+                # EN: Save average and max fitness
+                with open(f'results/{Number_Folder}/gp_results_generation_{i}.csv', mode='a', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(['Average', Avg_Generation_Fitness, '', '', ''])
+                    writer.writerow(['Max', self.MaxFitness, '', '', best_individual_number])
 
-            fitness_history.append(Avg_Generation_Fitness)
+                fitness_history.append(Avg_Generation_Fitness)
 
-        # ES: Crear folder de resultados
-        # EN: Save results folder
-        results_folder = f'results/{Number_Folder}'
-        if not os.path.exists(results_folder):
-            os.makedirs(results_folder)
+            # ES: Crear folder de resultados
+            # EN: Save results folder
+            results_folder = f'results/{Number_Folder}'
+            if not os.path.exists(results_folder):
+                os.makedirs(results_folder)
 
-        # ES: Graficar el fitness promedio
-        # EN: Plotting Average of fitness
-        plt.plot(fitness_history)
-        plt.xlabel('Generación')
-        plt.ylabel('Fitness Promedio')
-        plt.title('Fitness por Generación')
-        plt.grid(True)
+            # ES: Graficar el fitness promedio
+            # EN: Plotting Average of fitness
+            plt.plot(fitness_history)
+            plt.xlabel('Generación')
+            plt.ylabel('Fitness Promedio')
+            plt.title('Fitness por Generación')
+            plt.grid(True)
 
-        # ES: Guardar Historial de fitness en una imagen
-        # EN: Save fitness history in an image
-        plt.savefig(f'{results_folder}/fitness_plot.png')
-        plt.show()
+            # ES: Guardar Historial de fitness en una imagen
+            # EN: Save fitness history in an image
+            plt.savefig(f'{results_folder}/fitness_plot.png')
+            plt.clf()  # Clear the current figure for the next generation
+            #plt.show()
 
             ### If you want confirmation to continue after each generation uncomment the following
             # ans=raw_input("Do you wanna quit? (1==Yes,0==No)")
@@ -588,8 +586,8 @@ class Programs:
 
 
 # You just need to modify this function to generate trees of your own choice
-def FitnessFunction(Prog):
-    Avg_Fitness,Avg_Precision,Avg_Recall = Prog.EvalTree()
+def FitnessFunction(Prog, Number_Folder):
+    Avg_Fitness,Avg_Precision,Avg_Recall = Prog.EvalTree(Number_Folder)
 
     return Avg_Fitness,Avg_Precision,Avg_Recall
 
@@ -615,7 +613,7 @@ def roulette_selection(population):
 if __name__ == "__main__":
     Func_set = {Funciones.Img_Sum: 2, Funciones.Img_Sub:2, Funciones.Img_Multi: 2, Funciones.Img_Div: 2, Funciones.DX: 1, Funciones.DY: 1, Funciones.Filter_Gaussian: 1}
     Term_set = ["I", "R", "G", "B"]
-    pr = Programs(Func_set, Term_set, 5, 5, 10)
+    pr = Programs(Func_set, Term_set, 10, 10, 2)
     pr.MainLoop
     # wait = raw_input("Press any key to terminate....")
 

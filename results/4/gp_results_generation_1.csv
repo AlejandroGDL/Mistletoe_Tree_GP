@@ -1,0 +1,13 @@
+Individual,Fitness,Precision,Recall,Tree
+0,0.019623675505286868,0.010830173159999195,0.15478747916806437,"Funciones.Img_Multi (Funciones.Filter_Gaussian (Funciones.Img_Div (I , R ) ) , B )"
+1,0.0,0.0,0.0,"Funciones.Filter_Gaussian (Funciones.DY (Funciones.Img_Sub (R , R ) ) )"
+2,0.055363850537113256,0.02985094206151053,0.5566727136865635,"Funciones.Img_Sub (I , Funciones.Filter_Gaussian (G ) )"
+3,0.03342126966376137,0.025849685429717075,0.5599710367477808,"Funciones.Img_Sum (Funciones.Img_Div (Funciones.Img_Multi (R , G ) , G ) , Funciones.Img_Div (R , Funciones.DX (Funciones.Img_Div (B , G ) ) ) )"
+4,0.03768519542618662,0.021577100074048356,0.2323654055055868,"Funciones.Img_Multi (I , G )"
+5,0.0,0.0,0.0,"Funciones.Img_Sub (Funciones.DX (R ) , Funciones.DX (R ) )"
+6,0.04997273925324444,0.027128370359251294,0.44096163935967925,"Funciones.Img_Sum (R , Funciones.Img_Sum (Funciones.Img_Sub (B , I ) , Funciones.Img_Sub (R , Funciones.DY (Funciones.Img_Multi (B , Funciones.Img_Div (Funciones.Img_Div (Funciones.Img_Sub (I , Funciones.Filter_Gaussian (G ) ) , Funciones.Img_Div (I , B ) ) , R ) ) ) ) ) )"
+7,0.04021988940444856,0.022295296302966845,0.3066360162621595,"Funciones.Img_Sub (G , Funciones.Img_Div (Funciones.Img_Sub (I , Funciones.Filter_Gaussian (G ) ) , Funciones.Img_Div (I , B ) ) )"
+8,0.0,0.0,0.0,"Funciones.Img_Sub (B , B )"
+9,0.036961473767576906,0.03761547810312029,0.4770641073986292,"Funciones.Img_Sum (Funciones.Img_Sum (Funciones.Img_Multi (Funciones.DY (Funciones.DX (Funciones.Img_Div (G , Funciones.Img_Multi (Funciones.DX (G ) , R ) ) ) ) , I ) , Funciones.DY (Funciones.Filter_Gaussian (G ) ) ) , Funciones.Img_Multi (Funciones.Img_Sub (Funciones.Img_Sum (Funciones.Img_Sum (Funciones.Img_Multi (R , I ) , I ) , R ) , Funciones.DY (Funciones.Img_Multi (R , Funciones.Img_Sum (R , R ) ) ) ) , Funciones.Img_Div (Funciones.Img_Sub (Funciones.DY (R ) , Funciones.DX (Funciones.Filter_Gaussian (Funciones.DY (R ) ) ) ) , Funciones.Img_Div (I , Funciones.Img_Multi (Funciones.DX (B ) , Funciones.Img_Sum (Funciones.Img_Multi (I , Funciones.Img_Div (R , G ) ) , Funciones.Img_Sub (R , R ) ) ) ) ) ) )"
+Average,0.027324809355761804,,,
+Max,0.055363850537113256,,,2
