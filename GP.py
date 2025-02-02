@@ -32,7 +32,8 @@ import matplotlib.pyplot as plt
 
 #sys.setrecursionlimit(3000) #ORIGINAL
 #sys.setrecursionlimit(10000) 
-sys.setrecursionlimit(1000000000)
+#sys.setrecursionlimit(100000000)
+#sys.setrecursionlimit(1000000000)
 
 
 class Variables:
@@ -107,7 +108,6 @@ class Node:
             for i in range(0, len(self.Nodes)):
                 if self.Nodes[i].GetNodeTemp(nodeno) != None:
                     return self.Nodes[i].GetNodeTemp(nodeno)
-
         return None
 
     def SetNode(self, nodeno, CopyNode):
@@ -117,7 +117,7 @@ class Node:
             for i in range(0, len(self.Nodes)):
                 self.Nodes[i] = self.Nodes[i].SetNode(nodeno, CopyNode)
         return self
-
+    
     def RecalSize(self):
         self.Size = 1
         if self.Nodes:
@@ -164,13 +164,13 @@ class Node:
             IndentText = IndentText + kIndentText
         self.NodeValues[:] = []
         if self.Type == self.NodeTypes["LF"]:
-            print(IndentText, "+--[", self.Value, "]")
+            print(IndentText, "+--[", self.Value, "]", self.NodeId)
 
         elif self.Type == self.NodeTypes["CS"]:
-            print(IndentText, "+--[", str(self.Value), "]")
+            print(IndentText, "+--[", str(self.Value), "]", self.NodeId)
 
         else:
-            print(IndentText, "+--", self.FuncName.__name__)
+            print(IndentText, "+--", self.FuncName.__name__, self.NodeId)
             for i in range(0, len(self.Nodes)):
                 self.Nodes[i].DrawTree(level + 1)
 
@@ -220,7 +220,7 @@ class Program:
 
     def EvalTree(self, Number_Folder):
         print("\n ===== Next Individual =====")
-        self.PrintTree()
+        #self.PrintTree()
 
         tree_str = self.TreetoStr(self.Tree)
         print(tree_str)
@@ -319,7 +319,6 @@ class Program:
         return Avg_Fitness,Avg_Precision,Avg_Recall
 
     def PrintTree(self):
-        print('\n Orientation Tree')
         self.Tree.PrintTree()
 
     def Depth(self):
@@ -336,7 +335,7 @@ class Program:
     def GetNode(self, nodeno):
         return self.Tree.GetNode(nodeno)
 
-    def SetNode(self, CopyNode, NodeNo):
+    def SetNode(self, NodeNo, CopyNode):
         self.Tree.SetNode(NodeNo, CopyNode)
 
     # ES: Evaluación arbol preorder
@@ -348,6 +347,7 @@ class Program:
             return str(Tree.Value)
         elif Tree.Type == self.NodeTypes["CS"]:
             return str(Tree.Value)
+
         else:
             result = "Funciones." + Tree.FuncName.__name__ + " ("
             for i, child in enumerate(Tree.Nodes):
@@ -360,13 +360,13 @@ class Program:
     def Count_TreeNodes(self):
         return self.Tree.RecalSize()
 
-    # # # def RetCopy(self):
-    # # #     return self
+    def RetCopy(self):
+        return self
 
 class Programs:
 
-    def __init__(self, Func_set, Term_set, MaxDepth=10, Population_size=10, MaxGen=50, ReqFitness=99,
-                 CrossRate=0.9, MutRate=0.1, BirthRate=0.2, HighFitness=100):
+    def __init__(self, Func_set, Term_set, MaxDepth=1, Population_size=10, MaxGen=50, ReqFitness=99,
+                 CrossRate=0.9, MutRate=0.1, BirthRate=0.2, HighFitness=100, Verbose=False):
         self.Individuo = []
         self.MaxGen = MaxGen
         self.Population = Population_size
@@ -378,6 +378,7 @@ class Programs:
         self.BirthRate = BirthRate
         self.HighFitness = HighFitness
         self.MaxDepth = MaxDepth
+        self.Verbose = Verbose
         #Initial Poblation
         for i in range(0, Population_size):
             self.Individuo.append(Program(Func_set, Term_set, MaxDepth))
@@ -396,14 +397,19 @@ class Programs:
                 self.MaxFitness = 0  
                 Avg_Generation_Fitness = 0
 
+                # Reinciar población cada generación
+                # self.Individuo = []
+                # for j in range(0, self.Population):
+                #     self.Individuo.append(Program(Func_set, Term_set, self.MaxDepth))
+
                 # ES: Crea un archivo CSV de cada generación y guarda cada individuo
                 # EN: Create a CSV archive of each generation and save each individual
                 with open(f'results/{Number_Folder}/gp_results_generation_{i}.csv', mode='w', newline='') as file:
                     writer = csv.writer(file)
                     writer.writerow(['Individual', 'Fitness', 'Precision', 'Recall', 'Tree'])
 
-                # ES: Crea una población
-                # EN: Create a poblation
+                    # ES: Evalua una población
+                    # EN: Evaluate a poblation
                     for j in range(0, self.Population):
                         Avg_Fitness, Avg_Precision, Avg_Recall = FitnessFunction(self.Individuo[j], Number_Folder)
                         self.Individuo[j].AssignFitness(Avg_Fitness, Avg_Precision, Avg_Recall)
@@ -440,16 +446,18 @@ class Programs:
 
             # ES: Graficar el fitness promedio
             # EN: Plotting Average of fitness
-            plt.plot(fitness_history)
+            plt.plot(fitness_history, label='Average Fitness')
+            plt.axhline(y=self.MaxFitness, color='r', linestyle='--', label='Max Fitness')
             plt.xlabel('Generación')
             plt.ylabel('Fitness Promedio')
             plt.title('Fitness por Generación')
+            plt.legend()
             plt.grid(True)
 
             # ES: Guardar Historial de fitness en una imagen
             # EN: Save fitness history in an image
             plt.savefig(f'{results_folder}/fitness_plot.png')
-            plt.clf()  # Clear the current figure for the next generation
+            plt.clf()
             #plt.show()
 
             ### If you want confirmation to continue after each generation uncomment the following
@@ -473,10 +481,10 @@ class Programs:
         return 
 
     def CrossOver(self):
-
         # ES: Validar en caso que la población tenga fitness 0
         # EN: Validate in case poblation has fitnnes 0 
-        print("Padre 1 RULETA:")
+        print("===============")
+        print(" Padre 1 CrossOver:")
         Parent1 = roulette_selection(self.Individuo)
         if Parent1 is None:
             print("Error: Parent1 is None")
@@ -484,7 +492,7 @@ class Programs:
         if Parent1 is not None:
             Parent1.PrintTree()
 
-        print("Padre 2 RULETA:")
+        print("Padre 2 CrossOver:")
         Parent2 = roulette_selection(self.Individuo)
         if Parent2 is None:
             print("Error: Parent2 is None")
@@ -495,42 +503,60 @@ class Programs:
         # EN: Count tree nodes
         Parent1Nodes = Parent1.Count_TreeNodes()
         Parent2Nodes = Parent2.Count_TreeNodes()
+        print(f"Point 1: ")
 
         # ES: Escoger un nodo aleatorio
         # EN: Choose a random node
         Parent1Point = randint(1, Parent1Nodes)
         Parent2Point = randint(1, Parent2Nodes)
 
+        print("===============")
+        print("SubArbol 1")
         Child1 = Parent1.Tree.GetNode(Parent1Point)
         #Child1.PrintTree()
 
+        print("SubArbol 2")
         Child2 = Parent2.Tree.GetNode(Parent2Point)
         #Child2.PrintTree()
-        
-        #
-        print("Hijo 1 CRUZADO:")
-        Parent1.SetNode(Child2, Parent1Point)
-        Parent1.Tree.ReInit()
-        Parent1.PrintTree()
 
-        print("Hijo 2 CRUZADO:")
-        Parent2.SetNode(Child1, Parent2Point)
-        Parent2.Tree.ReInit()
-        Parent2.PrintTree()
+        print("===============")
+
+        print("Hijo 1 CrossOver:")
+        if (Parent1Point==1):
+            Parent1 = Child2
+            #Parent1.PrintTree()
+        else:
+            Parent1.SetNode(Parent1Point, Child2)
+            Parent1.Tree.ReInit()
+            #Parent1.PrintTree()
+
+        print("Hijo 2 CrossOver:")
+        if (Parent2Point==1):
+            Parent2 = Child1
+            #Parent2.PrintTree()
+        else:
+            Parent2.SetNode(Parent2Point, Child1)
+            Parent2.Tree.ReInit()
+            #Parent2.PrintTree()
+
 
         # ES: Validar que los hijos no tengan más nodos de los deseados
         # EN: Validate that the children do not exceed the maximum desired depth
-        if Parent1.Depth() > self.MaxDepth:
-            print("Hijo 1 excede la profundidad máxima, se descarta.")
-            Parent1 = None
-        if Parent2.Depth() > self.MaxDepth:
-            print("Hijo 2 excede la profundidad máxima, se descarta.")
-            Parent2 = None
+        # if Parent1.Depth() > self.MaxDepth:
+        #     print("Hijo 1 excede la profundidad máxima, se descarta.")
+        #     Parent1 = None
+        # if Parent2.Depth() > self.MaxDepth:
+        #     print("Hijo 2 excede la profundidad máxima, se descarta.")
+        #     Parent2 = None
 
-
-        self.Individuo.append(Parent1)
-        self.Individuo.append(Parent2)
-        return Parent1, Parent2
+        #self.Individuo.append(Parent1)
+        #self.Individuo.append(Parent2)
+        
+        if Parent1 is not None and Parent2 is not None:
+            return Parent1, Parent2
+        else:
+            print("Error: Uno de los padres es None")
+            return None, None
 
     def Mutation(self):
         print("Individuo sin mutar:")
@@ -544,24 +570,36 @@ class Programs:
         Term_set = ["I", "R", "G", "B"]
         new_subtree = Program(Func_set, Term_set, self.MaxDepth).Tree
 
-        individual_to_mutate.SetNode(new_subtree, mutation_point)
+        individual_to_mutate.SetNode(mutation_point, new_subtree)
         individual_to_mutate.Tree.ReInit()
 
-        # ES: Validar que los hijos no tengan más nodos de los deseados
-        # EN: Validate that the mutated individual does not exceed the maximum desired depth
+        # Validar que los hijos no tengan más nodos de los deseados
         if individual_to_mutate.Depth() > self.MaxDepth:
             print("El individuo mutado excede la profundidad máxima, se descarta.")
-            return
+            return None
 
-        self.Individuo.append(individual_to_mutate)
-        print("Individuo MUTADO:")
-        #individual_to_mutate.PrintTree()
+        # Asegúrate de que los nodos mutados no sean None
+        if individual_to_mutate is not None:
+            print("Individuo MUTADO:")
+            #individual_to_mutate.PrintTree()
+            return individual_to_mutate
+        else:
+            print("Error: Individuo mutado es None")
+            return None
 
     def Reproduction(self):
+        new_generation = []
+
         if random() < self.MutRate:
-            self.Mutation()
+            mutated_individual = self.Mutation()
+            if mutated_individual:
+                new_generation.append(mutated_individual)
         elif random() < self.CrossRate:
-            self.CrossOver()
+            offspring1, offspring2 = self.CrossOver()
+            if offspring1:
+                new_generation.append(offspring1)
+            if offspring2:
+                new_generation.append(offspring2)
 
         # ES: Asegurarse que el tamaño de la población es igual al Population_size
         # EN: Ensure the new population size is equal to Population_size
@@ -570,6 +608,8 @@ class Programs:
         while len(self.Individuo) > self.Population:
             self.Individuo.pop()
 
+        # Agregar la nueva generación a la población
+        #self.Individuo.extend(new_generation)
         return
 
     def Elitism(self):
@@ -581,8 +621,8 @@ class Programs:
         # EN: Ensure the best individual passes to the next generation without modification
         self.Individuo.append(best_individual)
 
-    # # # # def RetCopy(self):
-    # # # #     return self
+    # # # def RetCopy(self):
+    # # #     return self
 
 
 # You just need to modify this function to generate trees of your own choice
@@ -613,7 +653,7 @@ def roulette_selection(population):
 if __name__ == "__main__":
     Func_set = {Funciones.Img_Sum: 2, Funciones.Img_Sub:2, Funciones.Img_Multi: 2, Funciones.Img_Div: 2, Funciones.DX: 1, Funciones.DY: 1, Funciones.Filter_Gaussian: 1}
     Term_set = ["I", "R", "G", "B"]
-    pr = Programs(Func_set, Term_set, 10, 10, 2)
+    pr = Programs(Func_set, Term_set, MaxDepth=15, Population_size=10, MaxGen=20)
     pr.MainLoop
     # wait = raw_input("Press any key to terminate....")
 
@@ -679,3 +719,4 @@ if __name__ == "__main__":
 ### Note
 # You may also use this module to create instancesof many GPs running simultaneously
 # Or use it to run GP elsewhere in your program
+
