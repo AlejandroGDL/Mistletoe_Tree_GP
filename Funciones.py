@@ -9,9 +9,25 @@ from random import *
 
 # ES: Función para realizar el filtro gaussiano en imagen
 # EN: Function to apply Gaussian filter on image
-def Filter_Gaussian(image):
+def Filter_Gaussian1(image):
+    Img = np.nan_to_num(image, nan=0.0)
+    return cv2.GaussianBlur(Img, (5, 5), 0)
+
+def Filter_Gaussian2(image):
+    Img = np.nan_to_num(image, nan=0.0)
+    return cv2.GaussianBlur(Img, (11, 11), 0)
+
+def Filter_Gaussian3(image):
     Img = np.nan_to_num(image, nan=0.0)
     return cv2.GaussianBlur(Img, (15, 15), 0)
+
+def Filter_Gaussian4(image):
+    Img = np.nan_to_num(image, nan=0.0)
+    return cv2.GaussianBlur(Img, (21, 21), 0)
+
+def Filter_Gaussian5(image):
+    Img = np.nan_to_num(image, nan=0.0)
+    return cv2.GaussianBlur(Img, (25, 25), 0)
 
 # ES: Función para obtener la derivada en X y Y utilizando Sobel
 # EN: Function to get the derivative in X and Y using Sobel
@@ -75,6 +91,81 @@ def Img_Div(Image1, Image2):
     
     return cv2.divide(Img1, Img2, dtype=cv2.CV_64F)
 
+# ES: Función para aplicar el logaritmo natural a una imagen
+# EN: Function to apply natural logarithm to an image
+def Log_Image(image):
+    Img = np.nan_to_num(image, nan=0.0)
+    log_img = np.log(np.abs(Img) + 1)
+    log_img = np.clip(log_img, 0, 255)
+    return log_img.astype(np.uint8)
+
+# def Log_Image(image):
+#     Img = np.nan_to_num(image, nan=0.0)
+#     log_img = np.log(np.abs(Img) + 1)
+#     log_img = log_img.astype(np.float32)
+#     return cv2.convertScaleAbs(log_img)
+
+# ES: Función para aplicar la exponencial a una imagen
+# EN: Function to apply exponential to an image
+def Exp_Image(image):
+    Img = np.nan_to_num(image, nan=0.0).astype(np.float32)
+    exp_img = np.exp(Img)
+    exp_img = np.clip(exp_img, 0, 255)
+    return exp_img.astype(np.uint8)
+
+# def Exp_Image(image):
+#     Img = np.nan_to_num(image, nan=0.0).astype(np.float32)
+#     exp_img = np.exp(Img)
+#     exp_img = cv2.normalize(exp_img, None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX)
+#     return cv2.convertScaleAbs(exp_img)
+
+# ES: Función para multiplicar cada pixel de la imagen por 0.5
+# EN: Function to multiply each pixel of the image by 0.5
+def Half_Image(image):
+    Img = np.nan_to_num(image, nan=0.0)
+    half_img = 0.5 * Img
+    half_img = np.clip(half_img, 0, 255)
+    return half_img.astype(np.uint8)
+
+# def Half_Image(image):
+#     Img = np.nan_to_num(image, nan=0.0)
+#     return 0.5 * Img
+
+# ES: Función para obtener la raíz cuadrada de la imagen
+# EN: Function to get the square root of the image
+def Sqrt_Image(image):
+    Img = np.nan_to_num(image, nan=0.0)
+    sqrt_img = np.sqrt(np.abs(Img))
+    sqrt_img = np.clip(sqrt_img, 0, 255)
+    return sqrt_img.astype(np.uint8)
+
+# def Sqrt_Image(image):
+#     Img = np.nan_to_num(image, nan=0.0)
+#     sqrt_img = np.sqrt(np.abs(Img))
+#     sqrt_img = sqrt_img.astype(np.float32)  # Ensure the image is in float32 format
+#     return cv2.convertScaleAbs(sqrt_img)
+
+# ES: Función para aplicar el filtro Gabor con ángulo 0 a la imagen
+# EN: Function to apply Gabor filter with angle 0 to the image
+def Gabor0_Image(image):
+    Img = np.nan_to_num(image, nan=0.0)
+    g_kernel = cv2.getGaborKernel((21, 21), 8.0, 0, 10.0, 0.5, 0, ktype=cv2.CV_32F)
+    return cv2.filter2D(Img, cv2.CV_8UC3, g_kernel)
+
+# ES: Función para aplicar el filtro Gabor con ángulo 45 a la imagen
+# EN: Function to apply Gabor filter with angle 45 to the image
+def Gabor45_Image(image):
+    Img = np.nan_to_num(image, nan=0.0)
+    g_kernel = cv2.getGaborKernel((21, 21), 8.0, np.pi / 4, 10.0, 0.5, 0, ktype=cv2.CV_32F)
+    return cv2.filter2D(Img, cv2.CV_8UC3, g_kernel)
+
+# ES: Función para aplicar el filtro Gabor con ángulo 90 a la imagen
+# EN: Function to apply Gabor filter with angle 90 to the image
+def Gabor90_Image(image):
+    Img = np.nan_to_num(image, nan=0.0)
+    g_kernel = cv2.getGaborKernel((21, 21), 8.0, np.pi / 2, 10.0, 0.5, 0, ktype=cv2.CV_32F)
+    return cv2.filter2D(Img, cv2.CV_8UC3, g_kernel)
+    
 # ES: Función para observar las bandas de la imagen
 # EN: Funtion to see all image bands
 def Multiband_Convertation(Image):
@@ -99,6 +190,8 @@ def Multiband_Convertation(Image):
 def Validate_Size(Img1, Img2):
     if Img1.shape != Img2.shape:
         raise ValueError("The images do not have the same size.")
+
+
 
 
 
@@ -226,73 +319,131 @@ def RANDOM(ValuesList):
 
 
 def main():
-    Imagen1_path = '/Users/andro/Documents/Repositorios/CentroGeo-Practicas/Fun/DJI_1350.JPG'
-    Imagen2_path = '/Users/andro/Documents/Repositorios/CentroGeo-Practicas/Fun/DJI_1360.JPG'
+    Imagen1_path = '/Users/andro/Documents/Repositorios/Mistletoe_Tree_GP/ImagenesEntrenamiento/1/DJI_0090_v10_33.TIF'
+    Imagen2_path = '/Users/andro/Documents/Repositorios/Mistletoe_Tree_GP/ImagenesEntrenamiento/1/DJI_0120_v10_21.TIF'
     #Validate_Size(Imagen1_path,Imagen2_path)
 
-    # Imagen1 = Multiband_Convertation(Imagen1_path)
-    # Imagen2 = Multiband_Convertation(Imagen2_path)
+    Imagen1 = Multiband_Convertation(Imagen1_path)
+    Imagen2 = Multiband_Convertation(Imagen2_path)
     # print(Imagen1[0])
 
 
     # PRUEBAS
-    Imagen1 = [np.array([[np.nan, 2, 3], [4, 5, 6], [7, 8, 9]], dtype=np.float32), np.array([[5, 6], [7, 8]], dtype=np.float32), np.array([[9, 10], [11, 12]], dtype=np.float32)]
-    Imagen2 = [np.array([[1, 2, 3], [4, 5, 6], [7, 8, 0]], dtype=np.float32), np.array([[5, 6], [7, 8]], dtype=np.float32), np.array([[9, 10], [11, 12]], dtype=np.float32)]
+    #Imagen1 = [np.array([[np.nan, 2, 3], [4, 5, 6], [7, 8, 9]], dtype=np.float32), np.array([[5, 6], [7, 8]], dtype=np.float32), np.array([[9, 10], [11, 12]], dtype=np.float32)]
+    #Imagen2 = [np.array([[1, 2, 3], [4, 5, 6], [7, 8, 0]], dtype=np.float32), np.array([[5, 6], [7, 8]], dtype=np.float32), np.array([[9, 10], [11, 12]], dtype=np.float32)]
     print(f'Arreglo Original: \n {Imagen1[0]}')
     
 
 
     # Filtro Gaussiano
-    Filtro = Filter_Gaussian(Imagen1[0],3)
+    Filtro = Filter_Gaussian1(Imagen1[3])
     cv2.imshow('Filtro Gaussiano', Filtro)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-    # Derivadas
-    Dx = DX(Imagen1[0])
-    print(f'Dervidad X: \n {Dx}')
-    cv2.imshow('Derivada X', Dx)
+    # Filtro Gaussiano
+    Filtro = Filter_Gaussian2(Imagen1[4])
+    cv2.imshow('Filtro Gaussiano', Filtro)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-    Dy = DY(Imagen1[0])
-    print(f'Dervidad Y: \n {Dy}')
-    cv2.imshow('Derivada Y', Dy)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # # Filtro Gaussiano
+    # Filtro = Filter_Gaussian3(Imagen1[0])
+    # cv2.imshow('Filtro Gaussiano', Filtro)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
-    # Normalización
-    Img_Norm = Normalize_Image(Imagen1[0])
-    print(f'Normalización: \n {Img_Norm}')
-    cv2.imshow('Normalización', Img_Norm)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # # Filtro Gaussiano
+    # Filtro = Filter_Gaussian4(Imagen1[0])
+    # cv2.imshow('Filtro Gaussiano', Filtro)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
-    # Operaciones
-    Suma = Img_Sum(Imagen1[0], Imagen2[0])
-    print(f'Suma: \n {Suma}')
-    cv2.imshow('Suma', Suma)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # # Filtro Gaussiano
+    # Filtro = Filter_Gaussian5(Imagen1[0])
+    # cv2.imshow('Filtro Gaussiano', Filtro)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
-    Resta = Img_Sub(Imagen1[0], Imagen2[0])
-    print(f'Resta: \n {Resta}')
-    cv2.imshow('Resta', Resta)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # # Derivadas
+    # Dx = DX(Imagen1[0])
+    # print(f'Dervidad X: \n {Dx}')
+    # cv2.imshow('Derivada X', Dx)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
-    Multiplicación = Img_Multi(Imagen1[0], Imagen2[0])
-    print(f'Multiplicaión: \n {Multiplicación}')
-    cv2.imshow('Multiplicación', Multiplicación)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # Dy = DY(Imagen1[0])
+    # print(f'Dervidad Y: \n {Dy}')
+    # cv2.imshow('Derivada Y', Dy)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
-    Divición = Img_Div(Imagen1[0], Imagen2[0])
-    print(f'Divición: \n {Divición}')
-    cv2.imshow('Divición', Divición)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # # Normalización
+    # Img_Norm = Normalize_Image(Imagen1[0])
+    # print(f'Normalización: \n {Img_Norm}')
+    # cv2.imshow('Normalización', Img_Norm)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
+    # # Operaciones
+    # Suma = Img_Sum(Imagen1[0], Imagen2[0])
+    # print(f'Suma: \n {Suma}')
+    # cv2.imshow('Suma', Suma)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+
+    # Resta = Img_Sub(Imagen1[0], Imagen2[0])
+    # print(f'Resta: \n {Resta}')
+    # cv2.imshow('Resta', Resta)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+
+    # Multiplicación = Img_Multi(Imagen1[0], Imagen2[0])
+    # print(f'Multiplicaión: \n {Multiplicación}')
+    # cv2.imshow('Multiplicación', Multiplicación)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+
+    # Divición = Img_Div(Imagen1[0], Imagen2[0])
+    # print(f'Divición: \n {Divición}')
+    # cv2.imshow('Divición', Divición)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+
+    # # LOG
+    # Log = Log_Image(Imagen1[0])
+    # print(f'Logaritmo: \n {Log}')
+    # cv2.imshow('Logaritmo', Log)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+
+    # # EXP
+    # Exp = Exp_Image(Imagen1[0])
+    # print(f'Exponencial: \n {Exp}')
+    # cv2.imshow('Exponencial', Exp)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+
+    # # HALF
+    # Half = Half_Image(Imagen1[0])
+    # print(f'Mitad: \n {Half}')
+    # cv2.imshow('Mitad', Half)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+
+    # # SQRT
+    # SQRT = Sqrt_Image(Imagen1[0])
+    # print(f'Raíz Cuadrada: \n {SQRT}')
+    # cv2.imshow('Raíz Cuadrada', SQRT)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+
+    # #GABOR
+    # GABOR = Gabor0_Image(Imagen1[0])
+    # print(f'Gabor: \n {GABOR}')
+    # cv2.imshow('Gabor', GABOR)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
 
     

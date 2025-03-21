@@ -447,7 +447,7 @@ class Programs:
                             self.MaxFitnessProg = self.Individuo[j]
                             best_individual_number = j
                         
-                    #self.Elitism()
+                    self.Elitism()
                     self.Reproduction()
 
                 # ES: Promedio de fitness por generación
