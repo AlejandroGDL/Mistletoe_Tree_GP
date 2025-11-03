@@ -104,11 +104,14 @@ def evaluate_individual(tree):
     Harmonic_Mean = []
     Weighted_Kappa = []
 
+    ListaCarpetas = [1,3,4,5]    
+
     # ES: Carpeta imagenes entrenamiento
     # EN: Folder Image Training
-    for Number_Folder in range(1, 5):
+    #for Number_Folder in range(1, 5):
+    for Number_Folder in ListaCarpetas:   
 
-        image_directory = f"/Users/andro/Documents/Repositorios/Mistletoe_Tree_GP/ImagenesEntrenamiento/{Number_Folder}"
+        image_directory = f"/Users/andro/Documents/Repositorios/Mistletoe_Tree_GP/Imagenes_Entrenamiento/{Number_Folder}"
         image_pairs = get_image_pairs(image_directory)
 
         for img1, img2 in image_pairs:
@@ -206,9 +209,6 @@ def evaluate_individual(tree):
             # ES: Calcular la media armónica
             # EN: Calculate harmonic mean
             harmonic_mean = 3 / (1 / f_measure + 1 / precision + 1 / recall) if (f_measure > 0 and precision > 0 and recall > 0) else 0
-
-
-            #print(f"Precision: {precision} Recall: {recall} F-measure: {f_measure}")
 
             Fitness.append(f_measure)
             Precision.append(precision)
@@ -363,8 +363,8 @@ def genetic_algorithm(population_size, generations, max_depth=5, crossover_rate=
 
     # ES: Crear la carpeta 'resultados'
     # EN: Create 'resultados' folder
-    if not os.path.exists("resultados"):
-        os.makedirs("resultados")
+    if not os.path.exists("Resultado_Temporal"):
+        os.makedirs("Resultado_Temporal")
 
     # ES: Crear población
     # EN: Create population
@@ -381,7 +381,7 @@ def genetic_algorithm(population_size, generations, max_depth=5, crossover_rate=
 
         # ES: Crea un archivo CSV de cada generación y guarda cada individuo
         # EN: Create a CSV archive of each generation and save each individual
-        with open(f'resultados/gp_results_generation_{generation}.csv', mode='w', newline='') as file:
+        with open(f'Resultado_Temporal/gp_results_generation_{generation}.csv', mode='w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['Individual', 'Fitness', 'Precision', 'Recall', 'Overall_Accuracy', 'Harmonic_Mean', 'Weighted_Kappa', 'Tree'])
 
@@ -471,23 +471,17 @@ def genetic_algorithm(population_size, generations, max_depth=5, crossover_rate=
 
         # ES: Guardar el promedio y maximo fitness 
         # EN: Save average and max fitness
-        with open(f'resultados/gp_results_generation_{generation}.csv', mode='a', newline='') as file:
+        with open(f'Resultado_Temporal/gp_results_generation_{generation}.csv', mode='a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['Average', Avg_Generation_Fitness, '','','','',''])
             writer.writerow(['Max', MaxFitness,'',best_individual_number,'','',''])
 
         # ES: Guardar los individuos de la generación en un archivo .pkl
         # EN: Save the individuals of the generation in a .pkl file
-        with open(f'individuos/gp_individuals_generation_{generation}.pkl', 'wb') as f:
+        with open(f'Individuos_Pickle/gp_individuals_generation_{generation}.pkl', 'wb') as f:
             pickle.dump(population, f)
 
         fitness_history.append(Avg_Generation_Fitness)
-
-    # ES: Crear folder de resultados
-    # EN: Save results folder
-    results_folder = f'resultados'
-    if not os.path.exists(results_folder):
-        os.makedirs(results_folder)
 
     # ES: Graficar el fitness promedio
     # EN: Plotting average fitness
@@ -500,7 +494,7 @@ def genetic_algorithm(population_size, generations, max_depth=5, crossover_rate=
 
     # ES: Guardar el gráfico de fitness promedio
     # EN: Save average fitness plot
-    plt.savefig(f'resultados/average_fitness_plot.png')
+    plt.savefig(f'Resultado_Temporal/average_fitness_plot.png')
     #plt.show()
     plt.clf()
 
@@ -515,7 +509,7 @@ def genetic_algorithm(population_size, generations, max_depth=5, crossover_rate=
 
     # ES: Guardar el gráfico de fitness máximo
     # EN: Save max fitness plot
-    plt.savefig(f'resultados/max_fitness_plot.png')
+    plt.savefig(f'Resultado_Temporal/max_fitness_plot.png')
     #plt.show()
     plt.clf()
 
